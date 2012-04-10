@@ -4,7 +4,7 @@ The Next Gen Example42 Puppet modules share a common layout that make it possibl
 
 When using a module, generally, you have to "include" or call it and provide in some way variables that affect the module's behaviour and the configuration files it deploys.
 
-=== ALTERNATIVE OPTIONS TO PROVIDE DATA 
+== ALTERNATIVE OPTIONS TO PROVIDE DATA 
 In the next-gen Example42 modules you have 3 different ways to provide variables to a module:
 
 * With the old style "Set variables and include class" pattern:
@@ -48,7 +48,7 @@ The examples use parametrized classes, but for all the parameters you can set a 
 
 For example, the variable "$openssh_absent" is equivant to the "absent =>" parameter or hiera('openssh_absent').
 
-=== THE MAGIC OF PARAMS_LOOKUP
+== THE MAGIC OF PARAMS_LOOKUP
 The described behaviour is provided by the function params_lookup used for each module's argument.
 This function is provided by the puppi module, which is required by every Example42 module.
 Note that you are not forced to use (include) Puppi itself to use Example42 modules, you just need it to autoload its functions (in this case consider it as a Example42 stdlib).
@@ -86,7 +86,7 @@ Params_lookup has this behaviour, for each parameter passed to a class or define
 This is done for each argument provided by the main module class. Some of these arguments are related to the relevant application setup on different operating system, you generally have not to change them (BUT you still can, if needed): package, service, config_file... and so on.
 Other arguments affect the module's behaviour and how you can customize it without modifying it. Let's see the most important ones.
 
-=== USAGE - Basic management
+== USAGE - Basic management
 * Install openssh with default settings
 
         class { 'openssh': }
@@ -115,8 +115,20 @@ Other arguments affect the module's behaviour and how you can customize it witho
           audit_only => true
         }
 
+* Do not automatically restart a service when the relevant configuration file / dir is changed
 
-=== USAGE - Overrides and Customizations
+        class { 'openssh':
+          service_autorestart => false
+        }
+
+* Provide a specific version of the main class package
+
+        class { 'openssh':
+          version => '1:3.8.1p1-11',
+        }
+
+
+== USAGE - Overrides and Customizations
 * Use custom sources for main config file 
 
         class { 'openssh':
@@ -154,7 +166,7 @@ Other arguments affect the module's behaviour and how you can customize it witho
         }
 
 
-=== USAGE - Example42 extensions management 
+== USAGE - Example42 extensions management 
 * Activate puppi (recommended, but disabled by default). Note that this option requires the usage of Example42 puppi module
 
         class { 'openssh': 
