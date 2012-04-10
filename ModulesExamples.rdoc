@@ -20,7 +20,7 @@ The above code installs openssh with default options and enables monitoring via 
 You may need to customize some parameters for the openssh class, overriding the top scope general settings with:
 
         class { 'openssh':
-          monitor_tool => [ 'puppi' , 'nagios' , 'monit' ] # For this module we want also monit checks
+          monitor_tool => [ 'puppi' , 'nagios' , 'monit' ], # For this module we want also monit checks
           firewall_src => [ '10.0.0.0/8' ], # Allowed source IPs
           firewall_dst => $ipaddress_eth1,  # Allowed destination IP is taken by eth1 
         }
