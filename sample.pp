@@ -43,7 +43,7 @@ class { 'openssh':
   template => 'site/ssh/sshd.conf.erb',
 }
 
-Config File Path is defined in params.pp (can be overriden):
+# Config File Path is defined in params.pp (can be overriden):
 class { 'openssh':  
   config_file => '/etc/ssh/sshd_config',
 }
@@ -65,7 +65,7 @@ class { 'openssh':
 
 # Config Dir Path is defined in params.pp (can be overriden):
 class { 'openssh':
-  config_dir = '/etc/ssh',
+  config_dir => '/etc/ssh',
 }
 
 
