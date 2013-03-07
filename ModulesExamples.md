@@ -1,8 +1,8 @@
-= MODULES USAGE EXAMPLES
+# MODULES USAGE EXAMPLES
 
 Here are some usage examples of the NextGen example42 Puppet modules.
 
-== SETTING MONITORING / FIREWALLING BEHAVIOUR
+## SETTING MONITORING / FIREWALLING BEHAVIOUR
 Here's an example on how you can mix general top scope variables and a module without customizing its configuration.
 
 General Top Scope variables in site.pp (or via an ENC or on Hiera): 
@@ -34,7 +34,7 @@ The above code can be replaced by module specific (with openssh_ prefix) Top Sco
         class { 'openssh': }
 
 
-== CUSTOMIZING THE MODULE CONFIGURATION
+## CUSTOMIZING THE MODULE CONFIGURATION
 If you want to customize the configuration of the files provided by the module you have various alternatives.
 
         class { 'openssh':
@@ -116,7 +116,7 @@ The above example makes use, for better integration, of variables provided by th
 
 And, obviously place your custom class in a file that be autoloaded, such as: /etc/puppet/modules/site/manifests/example42_nrpe.pp 
 
-== EXTREME CUSTOMIZATIONS
+## EXTREME CUSTOMIZATIONS
 Example42 expose as class parameters many variables that generally are used only internally and don't need users' modifications because they are automatically calculated for different operating systems.
 There are some very specific cases where you might need to modify them, for example when you make a custom package of an application with custom paths and settings and you want to integrate it as the other modules (taking benefit of the monitoring / firewalling / puppi integrations, for example).
 

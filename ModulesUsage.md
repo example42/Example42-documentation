@@ -1,4 +1,4 @@
-= MODULES USAGE
+# MODULES USAGE
 
 The NextGen Example42 Puppet modules share a common layout that makes it possible to use them with a coherent and standard (at least inside the same module set) appoach.
 
@@ -6,7 +6,7 @@ All the new modules have a set of standard arguments to manage common tasks and,
 
 Here are the common options and usage patterns that you can find generally on all the NextGen modules.
 
-== ALTERNATIVE OPTIONS TO PROVIDE DATA 
+## ALTERNATIVE OPTIONS TO PROVIDE DATA 
 In the NextGen Example42 modules you have 3 different ways to provide variables to a module:
 
 * With the old style "Set variables and include class" pattern:
@@ -50,7 +50,7 @@ The examples use parametrized classes, but for all the parameters you can set a 
 
 For example, the variable "$openssh_absent" is equivant to the "absent =>" parameter or hiera('openssh_absent').
 
-== THE MAGIC OF PARAMS_LOOKUP
+## THE MAGIC OF PARAMS_LOOKUP
 The described behaviour is provided by the function params_lookup used for each module's argument.
 This function is provided by the puppi module, which is required by every Example42 module.
 Note that you are not forced to use (include) Puppi itself to use Example42 modules, you just need it to autoload its functions (in this case consider it as a Example42 stdlib).
@@ -88,7 +88,7 @@ Params_lookup has this behaviour, for each parameter passed to a class or define
 This is done for each argument provided by the main module class. Some of these arguments are related to the relevant application setup on different operating system, you generally have not to change them (BUT you still can, if needed): package, service, config_file... and so on.
 Other arguments affect the module's behaviour and how you can customize it without modifying it. Let's see the most important ones.
 
-== USAGE - Basic management
+## USAGE - Basic management
 * Install openssh with default settings
 
         class { 'openssh': }
@@ -130,7 +130,7 @@ Other arguments affect the module's behaviour and how you can customize it witho
         }
 
 
-== USAGE - Overrides and Customizations
+## USAGE - Overrides and Customizations
 * Use custom sources for main config file. Use this parameter to manage the configuration file content with static files (eventually using an array to manage specific cases). This parameter can cohexist with the template => one.
 
         class { 'openssh':
@@ -188,7 +188,7 @@ In this case a workaround could be something like:
         }
 
 
-== USAGE - Example42 extensions management 
+## USAGE - Example42 extensions management 
 * Activate puppi (recommended, but disabled by default). Note that this option requires the usage of Example42 puppi module and actually installs puppi on the target host. Even if the puppi module is required by all the other modules (for some of the functions it provides), you are not forced to actually install/activate it.
 
         class { 'openssh': 
