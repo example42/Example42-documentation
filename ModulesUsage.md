@@ -6,7 +6,7 @@ All the new modules have a set of standard arguments to manage common tasks and,
 
 Here are the common options and usage patterns that you can find generally on all the NextGen modules.
 
-## ALTERNATIVE OPTIONS TO PROVIDE DATA 
+## ALTERNATIVE OPTIONS TO PROVIDE DATA
 In the NextGen Example42 modules you have 3 different ways to provide variables to a module:
 
 * With the old style "Set variables and include class" pattern:
@@ -32,7 +32,7 @@ You can for example set general top scope variables that affect all your paramet
         class { 'openssh':
           template => 'example42/openssh/openssh.conf.erb',
         }
-        
+
 The above example has the same effect of:
 
         class { 'openssh':
@@ -63,30 +63,32 @@ Params_lookup has this behaviour, for each parameter passed to a class or define
           monitor_tool => [ "nagios" , "munin" , "puppi" ],
         }
 
-- If no argument is explicitely defined an automatic lookup is made with this precedence:
+- If no argument is explicitely defined an automatic lookup is made with this precedence (first matched value is returned by the function):
+
+- If Hiera exists, an Hiera lookup is done to a variable with the same name and the class name as prefix:
+
+       hiera('openssh_monitor_tool')
 
 - If Hiera exists and the params_lookup has the 'global' option set, an Hiera lookup is done on a general variable with the same name:
 
        hiera('monitor_tool')
 
-- If Hiera exists, an Hiera lookup is done to a, more specific, variable with the same name and the class name as prefix:
-
-       hiera('openssh_monitor_tool')
-
-- If Hiera does not exist or doesn't return any value the lookup is done on top scope variables. If the 'global' option is set, there's a first lookup of a top scope variable with the same name:
-
-       ::monitor_tool
-
-- Then a module specific top scope variable is looked for:
+- If Hiera does not exist or doesn't return any value the lookup is done on top scope variables.
+  First a module specific top scope variable is looked for:
 
        ::openssh_monitor_tool
 
-- Finally is the module's user has not set the variable in any way, the function looks for the default value (or the right value for different operating systems) in the params class of the same module:
+- If nothing is found , and if the 'global' option is set, a lookup is done directlty wuth the parameter name:
+
+       ::monitor_tool
+
+- Finally if the module's user has not set the variable in any way, the function looks for the default value (or the right value for different operating systems) in the params class of the same module:
 
        ::openssh::params::monitor_tool
 
 This is done for each argument provided by the main module class. Some of these arguments are related to the relevant application setup on different operating system, you generally have not to change them (BUT you still can, if needed): package, service, config_file... and so on.
 Other arguments affect the module's behaviour and how you can customize it without modifying it. Let's see the most important ones.
+
 
 ## USAGE - Basic management
 * Install openssh with default settings
@@ -156,30 +158,16 @@ Other arguments affect the module's behaviour and how you can customize it witho
         class { 'openssh':
           template => 'example42/openssh/openssh.conf.erb',    
           options  => {
-            'LogLevel' => 'INFO',
+            'LogLevel' => 'DEBUG',
             'UsePAM'   => 'yes',
           },
         }
 
-You can use the provided hash in different ways in a template.
-If these extra options are optional (define them if they are provided) you can use this approach in the referred template (note, this applies well, for example, in /etc/resolv.conf):
+  The Hash values can be used in your custom templates with the **options_lookup** function, which can also set a default value if it's not found the defined key:
 
-        <% scope.lookupvar("resolver::options").sort_by {|key, value| key}.each do |key, value| -%>
-        options <%= key %><% if value != "" -%>:<%= value %><% end -%>
-        <% end -%>
+        LogLevel <%= scope.function_options_lookup(['LogLevel','INFO']) %>
+        UsePAM <%= scope.function_options_lookup(['UsePAM','no']) %>
 
-Note that the syntax of the central line can change according to the configuration file's syntax, for example it can be:
-
-        <%= key %> = <%= value %><% end -%>
-
-Needless to say that this approach doesn't work if some of the options are required and you don't provide them in the options => hash.
-In this case a workaround could be something like:
-
-        <% if scope.lookupvar("openssh::options['Protocol']") then -%>
-        Protocol <%= options['Protocol'] %>
-        <% else -%>
-        Protocol 2 # Default value
-        <% end -%>
 
 * Automatically include a custom subclass. This is useful if you want to add extra resources to the module, without changing it. The included class can inherit or not the main class (avoid inheritance if you don't need to override parameters of existing resources).
 
