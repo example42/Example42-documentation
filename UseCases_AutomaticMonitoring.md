@@ -62,7 +62,13 @@ In a case I had to disable Nrpe checks over ssl with:
     class { 'nagios':
       use_ssl  => false,
     }
-    
+
+Also is possible to try alternative methods to export and realize checks. By default a file is created for each service or host check. You can try to use concat to build on file per host. In any case your Nagios server is doomed to have far many resources managed by Puppet, and its Puppet runs can last minutes.
+
+The variable $::nagios_filemode can be used to define what method to use. Possible values: concat, pupmod-concat (an alternative concat) and file, the default.
+
+    $::nagios_filemode = 'concat' # Default: file
+  
 
 ## Using Icinga
 
